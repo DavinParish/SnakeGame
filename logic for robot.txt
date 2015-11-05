@@ -1,0 +1,53 @@
+def move_robot:
+	listx = list of ten values, 5 left of robot.x 5 right
+	listy = list of ten values, five up from the robot, five below the robot 
+def move(list):
+	for each value in the list created in a position relative to the robot head:
+		get_tile(board, x, y)
+		if tile_type = APPLE
+			get_direction_left(board, x, y)
+			
+			robot.direction = get_direction_x
+
+			if x- robot.x == 0:
+				robot.direction = get_direction_y
+
+
+
+
+
+
+def get_tile(array, x, y):
+	return tile_type of tile board[x][y]
+
+
+
+def get_direction_x(board, x):
+
+	direction_left = x-robot.x
+	
+
+	if direction_left < 0:
+		direction = "left"
+			
+	elif direction_left > 0:
+		direction = "right"
+
+	return direction
+	
+
+
+def get_direction_y(board, y):
+
+	
+	direction_down= y- robot.y
+
+	if direction_down < 0
+		direction = "down"
+	elif direction_down > 0
+		direction = "up"
+
+	return direction
+
+
+
