@@ -927,7 +927,7 @@ while True:
 
             if event.key == pygame.K_n:
                 game.wait = False
-                SNAKES = [robot]
+                SNAKES = [snake, robot]
 
             if event.key == pygame.K_x:
                 snake.dead = True
