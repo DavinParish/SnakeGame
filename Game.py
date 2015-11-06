@@ -385,19 +385,6 @@ def move():
     print('\n\n')
 
 
-def get_tile(array, x, y):
-    if array[x][y] == BorderTile:
-        return 'border'
-    elif isinstance(array[x][y], PoisonTile):
-        return 'poison'
-    elif isinstance(array[x][y], MiracleTile):
-        return 'miracle'
-    elif isinstance(board[y][x], SpeedTile):
-        return 'speed'
-    elif isinstance(board[y][x], SlowTile):
-        return 'poison'
-    elif isinstance(board[y][x], Apple):
-        return 'apple'
 
 
 # Function that handles the changing of the snake head's orientation when it turns

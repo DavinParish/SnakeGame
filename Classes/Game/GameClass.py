@@ -35,4 +35,4 @@ class Game:
     b = randint(10, 50)
 
     # Variable for counting the number of poison apples
-    poison_count = b
+    poison_count = 0
