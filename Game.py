@@ -206,29 +206,6 @@ def check_front_x():
             return
 
 
-    # for x in range(0, len(list_front())):
-    #     # If an apple is found:
-    #     # if isinstance(board[head[0][1]][list_front()[x]], MiracleTile):
-    #     #     return
-    #     # elif isinstance(board[head[0][1]][list_front()[x]], SpeedTile):
-    #     #     return
-    #     # elif isinstance(board[head[0][1]][list_front()[x]], Apple):
-    #     #     return
-    #     y, x = head[1], point
-    #     if board[head[0][1]][x] in robot.tail[1:]:
-    #         change_direction()
-    #         return
-    #     elif board[head[0][1]][list_front()[x]] in snake.tail[1:]:
-    #         change_direction()
-    #         return
-    #     elif isinstance(board[head[0][1]][list_front()[x]], PoisonTile):
-    #         change_direction()
-    #         return
-    #     elif isinstance(board[head[0][1]][list_front()[x]], SlowTile):
-    #         change_direction()
-    #         return
-
-
 # Function to guide robot
 # A function to get the direction neccesary to go in order to get the apples
 def get_direction_x(x, head_position):
@@ -385,8 +362,6 @@ def move():
     print('\n\n')
 
 
-
-
 # Function that handles the changing of the snake head's orientation when it turns
 def change_snake(player, x, y, part):
     if player.direction == "Right":
@@ -397,6 +372,9 @@ def change_snake(player, x, y, part):
         draw_image(x, y, part + " up.png")
     elif player.direction == "Down":
         draw_image(x, y, part + " down.png")
+
+
+
 
 
 '''Sound and Images'''
@@ -550,6 +528,11 @@ def sudden_death(array, player):
 
 #  Function that returns a value of text for the game over screen
 def reset():
+    Cls = {
+        str(snake): "Player Green",
+        str(snake_2): "Player Blue",
+        str(robot): "The Robot",
+    }
 
     p = 0
     list_scores = list()
@@ -561,34 +544,32 @@ def reset():
 
     list_scores.sort()
     for j in SNAKES:
-        list_players.append(j)
-        if list_players[p].get_score() == max(list_scores):
-            winner = str(j)
-            return winner + " won with a score of " + str(max(list_scores))
-        p += 1
-        # score = snake.score
-        # score2 = snake_2.score
-        # if game.twoPlayer:
-        #     snake_score = "Player Green got a score of " + str(score) + " Player Blue got a score of " + str(score2)
-        #
-        #     return snake_score
-        # else:
-        #     your_score = "You got a score of " + str(score)
-        #
-        #     if score < 5:
-        #         return str(your_score) + ". Lame dude... lame"
-        #     elif 5 <= score < 10:
-        #         return str(your_score) + ". Yeah well... its better than 5"
-        #     elif 10 <= score < 20:
-        #         return str(your_score) + ". I've seen better"
-        #     elif 20 <= score < 30:
-        #         return str(your_score) + ". That's pretty good!"
-        #     elif 30 <= score < 40:
-        #         return str(your_score) + ". Nice job!"
-        #     elif 40 <= score < 50:
-        #         return str(your_score) + ". Wow, so close to being awesome..."
-        #     elif score >= 50:
-        #         return str(your_score) + ". High score! Awesome"
+        if game.twoPlayer:
+            list_players.append(j)
+            if list_players[p].get_score() == max(list_scores):
+                winner = Cls[str(j)]
+                return winner + " won with a score of " + str(max(list_scores))
+            p += 1
+        else:
+            score = snake.score
+
+
+            your_score = "You got a score of " + str(score)
+
+            if score < 5:
+                return str(your_score) + ". Lame dude... lame"
+            elif 5 <= score < 10:
+                return str(your_score) + ". Yeah well... its better than 5"
+            elif 10 <= score < 20:
+                return str(your_score) + ". I've seen better"
+            elif 20 <= score < 30:
+                return str(your_score) + ". That's pretty good!"
+            elif 30 <= score < 40:
+                return str(your_score) + ". Nice job!"
+            elif 40 <= score < 50:
+                return str(your_score) + ". Wow, so close to being awesome..."
+            elif score >= 50:
+                return str(your_score) + ". High score! Awesome"
 
 
 # the function concerning the reset of all variables to their original values
@@ -611,23 +592,9 @@ def restart(player):
 
 
 def home(player):
-    player.score = 0
-    player.size = 1
-    player.dead = False
-    player.tail = player.original_position
-    player.direction = player.original_direction
-    player.speed = player.original_speed
-    player.saved = False
-    spawn_all_apples()
-    player.played = False
-    game.twoPlayer = False
-    pygame.mixer.stop()
-    player.cheat = False
-    pygame.draw.rect(screen, (0, 0, 0, 255), (0, 0, 4000, 1000), 0)
+    for s in SNAKES:
+        restart(s)
     game.wait = True
-    game.reduced = False
-    game.poison_count = 0
-    game.paused = False
 
 
 # Function for retrieving, sorting and displaying the highest four scores
@@ -721,16 +688,12 @@ def draw():
         distance = 200
         # decide who got a higher score and say who won. tell them if their score is saved
         if snake.score > snake_2.score:
-            if game.twoPlayer:
-                display_box("Player Green won!", (0, 100))
             if snake.saved:
                 display_box("Score saved!", (0, distance))
             else:
                 display_box("Do you want to save your score, Player Green? If so press o", (0, distance))
 
         if snake_2.score > snake.score:
-            if game.twoPlayer:
-                display_box("Player Blue won!", (0, 100))
             if snake_2.saved:
                 display_box("Score saved!", (0, distance))
             else:
@@ -771,7 +734,8 @@ def draw():
             display_box("Score Player Green: " + str(snake.score), (1400, 0))
         else:
             # Displays fo one snake only
-            display_box("Score: " + str(snake.score), (0, 0))
+            display_box("Score Player Blue: " + str(robot.score), (0, 0))
+            display_box("Score Player Green: " + str(snake.score), (1400, 0))
 
     pygame.display.flip()
 
@@ -782,7 +746,7 @@ def update_board():
         return
     if game.poison_count < game.b:
         place_poison()
-
+    # randomize the special apples
     if game.special_counter < 20:
         # random number of apples to spawn
         p = randint(0, 1)
@@ -804,6 +768,7 @@ def update_board():
         spawn("apple", board)
         game.counter += 1
 
+    # Handle for when a snake eats
     for y, row in enumerate(board):
         for x, tile in enumerate(row):
             if not tile.update():
@@ -815,7 +780,6 @@ def update_board():
             for sk in SNAKES:
                 itself(sk)
                 if sk.tail and sk.tail[0] == (x, y):
-
                     tile.effect(sk)
                     if isinstance(board[y][x], PoisonTile):
                         game.poison_count -= 1
@@ -904,7 +868,7 @@ while True:
 
             if event.key == pygame.K_q:
                 # Key to quit
-                if snake.dead or snake_2.dead or game.wait:
+                if snake.dead or snake_2.dead or game.wait or robot.dead:
                     quit()
 
             if event.key == pygame.K_y:
@@ -928,6 +892,7 @@ while True:
 
             if event.key == pygame.K_SPACE:
                 snake.size += 20
+
 
     # Mover the snakes and the robot
     if not game.paused and not game.wait and not any([s.dead for s in SNAKES]):
